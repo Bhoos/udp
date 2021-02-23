@@ -1,5 +1,5 @@
-import { Serializable, Serializer, BufferSerializer } from '@bhoos/serialization';
-import { UdpSocket } from './UdpSocket';
+import { Serializable, Serializer } from '@bhoos/serialization';
+import { UdpSocket } from './UdpSocket.js';
 
 const MAX_RETRY_INTERVAL = 3000;
 const MIN_RETRY_INTERVAL = 500;

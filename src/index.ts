@@ -1,2 +1,2 @@
-export { UdpSocket } from './UdpSocket';
-export { UdpStream } from './UdpStream';
+export { UdpSocket } from './UdpSocket.js';
+export { UdpStream } from './UdpStream.js';

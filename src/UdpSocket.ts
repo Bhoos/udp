@@ -1,6 +1,6 @@
 import { createSocket, Socket } from 'dgram';
 import { AddressInfo } from 'net';
-import { EndPoint, UdpStream } from './UdpStream';
+import { EndPoint, UdpStream } from './UdpStream.js';
 import { BufferSerializer, Serializable, Oracle } from '@bhoos/serialization';
 
 const GENERAL = 0;
