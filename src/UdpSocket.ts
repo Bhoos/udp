@@ -5,6 +5,7 @@ import { BufferSerializer, Serializable, Oracle } from '@bhoos/serialization';
 
 const GENERAL = 0;
 const STREAM = 1;
+const BROADCAST_ADDRESS = '255.255.255.255';
 
 function getEndPointId(endpoint: EndPoint) {
   return `${endpoint.address}:${endpoint.port}`;
@@ -75,7 +76,13 @@ export class UdpSocket<S = UdpStream> {
   }
 
   end() {
-    this.socket.off('message', this.handleMessage);
+    this.handlers.clear();
+    this.streamHandlers.clear();
+    this.connectHandlers.clear();
+    this.openHandler = undefined;
+    this.closeHandler = undefined;
+
+    this.socket.removeAllListeners();
     this.socket.close();
   }
 
@@ -122,7 +129,7 @@ export class UdpSocket<S = UdpStream> {
       const obj = this.oracle.serialize(null, serializer);
       const id = Oracle.identify(obj);
       const handler = this.handlers.get(id);
-      handler(obj, rinfo);
+      if (handler) handler(obj, rinfo);
     } else if (type === STREAM) {
       if (this.stream) {
         const serializer = new BufferSerializer(this.stream.version, buffer, 1);
@@ -199,5 +206,9 @@ export class UdpSocket<S = UdpStream> {
     serializer.uint8(GENERAL);
     this.oracle.serialize(msg, serializer);
     this.socket.send(serializer.getBuffer(), 0, serializer.length, to.port, to.address);
+  }
+
+  broadcast(port: number, msg: Serializable) {
+    this.send({ port, address: BROADCAST_ADDRESS }, msg);
   }
 }
