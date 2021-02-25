@@ -1,6 +1,6 @@
 import { createSocket, Socket } from 'dgram';
 import { AddressInfo } from 'net';
-import { EndPoint, UdpStream } from './UdpStream';
+import { EndPoint, UdpStream } from './UdpStream.js';
 import { BufferSerializer, Serializable, Oracle } from '@bhoos/serialization';
 
 const GENERAL = 0;
@@ -38,6 +38,8 @@ export class UdpSocket<S = UdpStream> {
   }
 
   connect(endpoint: EndPoint, message: Serializable): UdpStream {
+    this.socket.bind();
+
     const stream = new UdpStream(this, endpoint, this.version, () => {
       this.stream = null;
       this.closing = true;

@@ -3,18 +3,27 @@
   "version": "1.0.7",
   "description": "UDP direct and streaming communication library",
   "main": "dist/index.js",
+  "module": "es6/index.js",
   "react-native": {
     "dist/index.js": "src/index.ts",
     "dgram": "react-native-udp"
   },
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./es6/index.js"
+  },
   "files": [
     "src",
-    "dist"
+    "dist",
+    "es6"
   ],
   "scripts": {
     "test": "jest",
-    "clean": "rimraf dist",
-    "build": "tsc"
+    "clean": "rimraf dist && rimraf es6",
+    "build:cjs": "tsc",
+    "build:es6": "mkdir -p es6 && echo '{\"type\":\"module\"}' > es6/package.json && tsc --module es6 --outDir es6",
+    "build": "yarn build:cjs && yarn build:es6",
+    "prepublishOnly": "yarn clean && yarn build"
   },
   "dependencies": {
     "@bhoos/serialization": "^1.0.0"
