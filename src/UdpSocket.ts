@@ -37,6 +37,8 @@ export class UdpSocket<S = UdpStream> {
   }
 
   connect(endpoint: EndPoint, message: Serializable): UdpStream {
+    this.socket.bind();
+
     const stream = new UdpStream(this, endpoint, this.version, () => {
       this.stream = null;
       this.closing = true;
